@@ -1,0 +1,10 @@
+services:
+  web:
+    container_name: nginx_esgul
+    image: nginx:latest
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./src:/usr/share/nginx/html
+      - ./latihan:/usr/share/nginx/html/latihan
