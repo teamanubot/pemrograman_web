@@ -1,11 +1,12 @@
 # Perkenalan
 
-Nama: Rivai
-NIM: 2030801290
-Fakultas: Ilmu Komputer
-Jurusan: Teknik Informatika
-Mata Kuliah: Pemrograman Website
-Pengajar: JEFRY SUNUPURWA ASRI, S.Kom., M.Kom.
+Nama            : Rivai  
+NIM             : 2030801290  
+Fakultas        : Ilmu Komputer  
+Jurusan         : Teknik Informatika  
+Mata Kuliah     : Pemrograman Website  
+Pengajar        : JEFRY SUNUPURWA ASRI, S.Kom., M.Kom.  
+
 **Tema Studi Kasus: Data Pembayaran**
 
 ---
