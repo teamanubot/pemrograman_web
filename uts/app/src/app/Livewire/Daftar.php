@@ -15,6 +15,8 @@ class Daftar extends Component
     public $whatsapp_number;
     public $subscription_type;
     public $payment_proof;
+    public $showPopup = false;
+    public $popupData = [];
 
     protected function rules()
     {
@@ -45,7 +47,16 @@ class Daftar extends Component
             'payment_proof' => $path,
         ]);
 
-        session()->flash('success', "Data berhasil dikirim. ID Anda: {$status->id}. Silakan tunggu verifikasi.");
+        // Set data popup
+        $this->popupData = [
+            'id' => $status->id,
+            'name' => $this->name,
+            'whatsapp_number' => $this->whatsapp_number,
+            'subscription_type' => $this->subscription_type,
+            'payment_proof' => $path,
+        ];
+
+        $this->showPopup = true;
 
         $this->reset(['name', 'whatsapp_number', 'subscription_type', 'payment_proof']);
         $this->resetValidation();
