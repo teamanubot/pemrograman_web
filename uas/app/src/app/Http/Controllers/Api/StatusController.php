@@ -37,8 +37,14 @@ class StatusController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"name"},
-     *             @OA\Property(property="name", type="string", example="aktif")
+     *             required={"akun_id", "nama", "subscription_type", "price"},
+     *             @OA\Property(property="akun_id", type="integer", example=1),
+     *             @OA\Property(property="nama", type="string", example="aktif"),
+     *             @OA\Property(property="whatsapp_number", type="string", example="6281234567890"),
+     *             @OA\Property(property="subscription_type", type="string", enum={"selfbot", "official bot"}),
+     *             @OA\Property(property="payment_status", type="string", enum={"pending", "approved", "rejected"}, example="pending"),
+     *             @OA\Property(property="payment_transaction_id", type="integer", nullable=true),
+     *             @OA\Property(property="price", type="number", format="float", example=150000)
      *         )
      *     ),
      *     @OA\Response(response=201, description="Status created"),
@@ -48,7 +54,13 @@ class StatusController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:50',
+            'akun_id' => 'required|exists:akuns,id',
+            'nama' => 'required|string|max:50',
+            'whatsapp_number' => 'nullable|string|max:20',
+            'subscription_type' => 'required|in:selfbot,official bot',
+            'payment_status' => 'nullable|in:pending,approved,rejected',
+            'payment_transaction_id' => 'nullable|exists:payment_transactions,id',
+            'price' => 'required|numeric|min:0',
         ]);
 
         return response()->json(Status::create($validated), 201);
@@ -79,7 +91,12 @@ class StatusController extends Controller
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\RequestBody(
      *         @OA\JsonContent(
-     *             @OA\Property(property="name", type="string")
+     *             @OA\Property(property="nama", type="string"),
+     *             @OA\Property(property="whatsapp_number", type="string"),
+     *             @OA\Property(property="subscription_type", type="string", enum={"selfbot", "official bot"}),
+     *             @OA\Property(property="payment_status", type="string", enum={"pending", "approved", "rejected"}),
+     *             @OA\Property(property="payment_transaction_id", type="integer"),
+     *             @OA\Property(property="price", type="number", format="float")
      *         )
      *     ),
      *     @OA\Response(response=200, description="Updated"),
@@ -91,7 +108,12 @@ class StatusController extends Controller
         $status = Status::findOrFail($id);
 
         $validated = $request->validate([
-            'name' => 'required|string|max:50',
+            'nama' => 'required|string|max:50',
+            'whatsapp_number' => 'nullable|string|max:20',
+            'subscription_type' => 'required|in:selfbot,official bot',
+            'payment_status' => 'nullable|in:pending,approved,rejected',
+            'payment_transaction_id' => 'nullable|exists:payment_transactions,id',
+            'price' => 'required|numeric|min:0',
         ]);
 
         $status->update($validated);

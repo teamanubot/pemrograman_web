@@ -25,8 +25,19 @@ class Akun extends Authenticatable
         'remember_token',
     ];
 
+    public function paymentTransactions()
+    {
+        return $this->hasMany(PaymentTransaction::class);
+    }
+
     public function statuses()
     {
         return $this->hasMany(Status::class);
     }
+
+    public function dataPenyewaBots()
+    {
+        return $this->hasMany(DataPenyewaBot::class);
+    }
+
 }

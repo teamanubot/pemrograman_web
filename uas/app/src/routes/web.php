@@ -10,6 +10,7 @@ use App\Livewire\ProductPage;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OtpController;
+use App\Http\Controllers\MidtransController;
 
 
 /* NOTE: Do Not Remove
@@ -26,8 +27,6 @@ Livewire::setScriptRoute(function ($handle) {
 / END
 */
 Route::get('/', ShowHomePage::class )->name('home');
-Route::get('/daftar', \App\Livewire\Daftar::class)->name('daftar');
-Route::get('/order', ProductPage::class )->name('order');
 Route::get('/cek-status', CekStatus::class )->name('cek-status');
 Route::get('/login', AkunLogin::class)->name('akun.login');
 Route::post('/send-otp', [OtpController::class, 'sendOtp'])->name('send.otp');  
@@ -41,17 +40,10 @@ Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 
 // Kirim OTP
 Route::post('/send-otp', [OtpController::class, 'sendOtp'])->name('send.otp');
 
-
-Route::get('/tes-otp', function () {
-    $res = Http::withHeaders([
-        'x-whatsapp-token' => 'rivai123',
-    ])->post('http://152.42.185.116:3000/send', [
-        'number' => '6281234567890',
-        'message' => 'Test OTP dari route manual',
-    ]);
-
-    return $res->body();
-});
+Route::get('/order', [MidtransController::class, 'form'])->name('product.form');
+Route::post('/get-midtrans-token', [MidtransController::class, 'token'])->name('midtrans.token');
+Route::post('/midtrans-success', [MidtransController::class, 'handleSuccess'])->name('midtrans.success');
+Route::post('/midtrans/webhook', [MidtransController::class, 'webhook'])->name('midtrans.webhook');
 
 Route::post('/logout-akun', function () {
     Auth::guard('akun')->logout();

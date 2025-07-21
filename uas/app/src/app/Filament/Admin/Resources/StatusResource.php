@@ -3,7 +3,8 @@
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\StatusResource\Pages;
-use App\Filament\Admin\Resources\StatusResource\RelationManagers;
+use App\Models\Akun;
+use App\Models\PaymentTransaction;
 use App\Models\Status;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -11,7 +12,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class StatusResource extends Resource
 {
@@ -23,39 +23,58 @@ class StatusResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('akun_id')
-                    ->relationship('akun', 'name')
-                    ->label('Nama Akun')
-                    ->searchable()
-                    ->required(),
+                Forms\Components\Section::make('Informasi Akun')
+                    ->schema([
+                        Forms\Components\Select::make('akun_id')
+                            ->relationship('akun', 'name')
+                            ->label('Nama Akun')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
 
-                Forms\Components\TextInput::make('nama')
-                    ->label('Nama Penyewa Bot')
-                    ->required(),
+                        Forms\Components\TextInput::make('nama')
+                            ->label('Nama Penyewa')
+                            ->required(),
 
-                Forms\Components\Select::make('subscription_type')
-                    ->label('Jenis Langganan')
-                    ->options([
-                        'selfbot' => 'Selfbot',
-                        'official bot' => 'Official Bot',
-                    ])
-                    ->required(),
-                Forms\Components\Select::make('payment_status')
-                    ->label('Status Pembayaran')
-                    ->options([
-                        'pending' => 'Pending',
-                        'approved' => 'Approved',
-                        'rejected' => 'Rejected',
-                    ])
-                    ->required(),
-                Forms\Components\FileUpload::make('payment_proof')
-                    ->image()
-                    ->required(),
-                Forms\Components\TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->prefix('Rp ')
-                    ->rule('numeric'),
+                        Forms\Components\TextInput::make('whatsapp_number')
+                            ->label('No. WhatsApp')
+                            ->required()
+                            ->tel(),
+                    ])->columns(3),
+
+                Forms\Components\Section::make('Langganan & Pembayaran')
+                    ->schema([
+                        Forms\Components\Select::make('subscription_type')
+                            ->label('Jenis Langganan')
+                            ->options([
+                                'selfbot' => 'Selfbot',
+                                'official bot' => 'Official Bot',
+                            ])
+                            ->required(),
+
+                        Forms\Components\Select::make('payment_status')
+                            ->label('Status Pembayaran')
+                            ->options([
+                                'pending' => 'Pending',
+                                'approved' => 'Approved',
+                                'rejected' => 'Rejected',
+                            ])
+                            ->required(),
+
+                        Forms\Components\Select::make('payment_transaction_id')
+                            ->label('Transaksi Midtrans')
+                            ->relationship('paymentTransaction', 'midtrans_order_id')
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('Pilih jika ada transaksi')
+                            ->nullable(),
+                        
+                        Forms\Components\TextInput::make('price')
+                            ->label('Harga')
+                            ->prefix('Rp')
+                            ->numeric()
+                            ->rules(['required', 'numeric', 'min:0']),
+                    ])->columns(2),
             ]);
     }
 
@@ -66,49 +85,57 @@ class StatusResource extends Resource
                 Tables\Columns\TextColumn::make('akun.name')
                     ->label('Nama Akun')
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('nama')
-                    ->label('Nama Penyewa Bot')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('akun.whatsapp_number')
-                    ->label('No. WhatsApp')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('subscription_type'),
-                Tables\Columns\TextColumn::make('payment_status')
-                    ->searchable(),
-                Tables\Columns\ImageColumn::make('payment_proof')
-                    ->disk('public')
-                    ->visibility('public')
-                    ->height(80),
+                    ->label('Nama Penyewa'),
+
+                Tables\Columns\TextColumn::make('whatsapp_number')
+                    ->label('No. WhatsApp'),
+
+                Tables\Columns\BadgeColumn::make('subscription_type')
+                    ->colors([
+                        'primary' => 'selfbot',
+                        'success' => 'official bot',
+                    ])
+                    ->label('Jenis Langganan'),
+
+                Tables\Columns\BadgeColumn::make('payment_status')
+                    ->colors([
+                        'pending' => 'warning',
+                        'approved' => 'success',
+                        'rejected' => 'danger',
+                    ])
+                    ->label('Status'),
+
+                Tables\Columns\TextColumn::make('paymentTransaction.midtrans_order_id')
+                    ->label('Order ID Midtrans')
+                    ->sortable()
+                    ->copyable()
+                    ->toggleable(),
+
                 Tables\Columns\TextColumn::make('price')
-                    ->sortable()
-                    ->formatStateUsing(fn($state) => 'Rp ' . number_format($state, 2, ',', '.')),
+                    ->label('Harga')
+                    ->formatStateUsing(fn($state) => 'Rp ' . number_format($state, 0, ',', '.'))
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Dibuat')
+                    ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

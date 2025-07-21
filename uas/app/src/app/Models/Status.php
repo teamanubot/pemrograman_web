@@ -17,7 +17,7 @@ class Status extends Model
         'whatsapp_number',
         'subscription_type',
         'payment_status',
-        'payment_proof',
+        'payment_transaction_id',
         'price',
     ];
 
@@ -62,5 +62,10 @@ class Status extends Model
     public function akun()
     {
         return $this->belongsTo(Akun::class);
+    }
+
+    public function paymentTransaction()
+    {
+        return $this->belongsTo(PaymentTransaction::class);
     }
 }

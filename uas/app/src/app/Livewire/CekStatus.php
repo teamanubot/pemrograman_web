@@ -10,31 +10,29 @@ use Illuminate\Support\Facades\Http;
 
 class CekStatus extends Component
 {
-    public $search;
-    public $statuses = []; // Mengganti $status menjadi array
+    public $statuses = [];
     public $subscriptionData = [];
     public $error;
 
     public function mount()
     {
-        if (!Auth::guard('akun')->check()) {
-            session()->flash('error', 'Silakan login terlebih dahulu untuk mengecek status.');
+        $akun = Auth::guard('akun')->user();
+
+        if (!$akun) {
+            session()->flash('error', 'Silakan login terlebih dahulu.');
             return redirect()->route('akun.login');
         }
 
-        $akun = Auth::guard('akun')->user();
+        // Ambil semua status milik akun
+        $this->statuses = Status::with('paymentTransaction')
+            ->where('akun_id', $akun->id)
+            ->get();
 
-        // Ambil semua status dengan nama sesuai nama akun
-        $this->statuses = Status::where('nama', $akun->name)->get();
-
-        // Ambil semua subscription terkait status yang ditemukan
         foreach ($this->statuses as $status) {
             if ($status->payment_status === 'approved') {
-                $sub = DataPenyewaBot::where('status_id', $status->id)
+                $this->subscriptionData[$status->id] = DataPenyewaBot::where('status_id', $status->id)
                     ->where('jenisbot', $status->subscription_type)
                     ->first();
-
-                $this->subscriptionData[$status->id] = $sub;
             }
         }
 
@@ -43,59 +41,23 @@ class CekStatus extends Component
         }
     }
 
-
-    public function cek()
-    {
-        $this->reset(['status', 'subscription', 'error']);
-
-        if (!$this->search) {
-            $this->error = 'Harap isi ID atau nama untuk cek status.';
-            return;
-        }
-
-        // Cari berdasarkan ID atau nama
-        if (ctype_digit($this->search)) {
-            $this->status = Status::find($this->search);
-        } else {
-            $this->status = Status::where('nama', $this->search)->first();
-        }
-
-        if (!$this->status) {
-            $this->error = 'Data tidak ditemukan.';
-            return;
-        }
-
-        if ($this->status->payment_status !== 'approved') {
-            $this->error = 'Status pembayaran belum disetujui.';
-            return;
-        }
-
-        $this->subscription = DataPenyewaBot::where('status_id', $this->status->id)
-            ->where('jenisbot', $this->status->subscription_type)
-            ->first();
-
-        if (!$this->subscription) {
-            $this->error = 'Data penyewa bot tidak ditemukan.';
-        }
-    }
-
     private function normalisasiNomor($nomor)
     {
-        $nomor = preg_replace('/[^0-9+]/', '', $nomor); // Hanya izinkan angka dan +
+        $nomor = preg_replace('/[^0-9+]/', '', $nomor);
 
         if (strpos($nomor, '+62') === 0) {
-            return '62' . substr($nomor, 3); // +62xxxx → 62xxxx
+            return '62' . substr($nomor, 3);
         }
 
         if (strpos($nomor, '08') === 0) {
-            return '62' . substr($nomor, 1); // 08xxxx → 628xxxx
+            return '62' . substr($nomor, 1);
         }
 
         if (strpos($nomor, '62') === 0) {
-            return $nomor; // Sudah dalam format benar
+            return $nomor;
         }
 
-        return ''; // Format tidak valid
+        return '';
     }
 
     public function kirimInvoice($id)
@@ -143,8 +105,6 @@ class CekStatus extends Component
         }
     }
 
-
-    
     public function render()
     {
         return view('livewire.cek-status');

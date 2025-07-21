@@ -40,9 +40,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AkunSeeder::class,
+            ProductSeeder::class,       // ⬅️ Pindahkan ke atas
             StatusSeeder::class,
             DataPenyewaBotSeeder::class,
-            ProductSeeder::class,
         ]);
     }
+
 }

@@ -59,6 +59,9 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()
                     ->label('Manajemen Bot')
                     ->icon('heroicon-o-cpu-chip'),
+
+                NavigationGroup::make()
+                    ->label('Manajemen Pembayaran'),
                     
                 NavigationGroup::make()
                     ->label('Administration'),

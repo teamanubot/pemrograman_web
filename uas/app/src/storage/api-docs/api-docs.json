@@ -602,12 +602,48 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "name"
+                                    "akun_id",
+                                    "nama",
+                                    "subscription_type",
+                                    "price"
                                 ],
                                 "properties": {
-                                    "name": {
+                                    "akun_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "nama": {
                                         "type": "string",
                                         "example": "aktif"
+                                    },
+                                    "whatsapp_number": {
+                                        "type": "string",
+                                        "example": "6281234567890"
+                                    },
+                                    "subscription_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "selfbot",
+                                            "official bot"
+                                        ]
+                                    },
+                                    "payment_status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pending",
+                                            "approved",
+                                            "rejected"
+                                        ],
+                                        "example": "pending"
+                                    },
+                                    "payment_transaction_id": {
+                                        "type": "integer",
+                                        "nullable": true
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 150000
                                     }
                                 },
                                 "type": "object"
@@ -682,8 +718,33 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "name": {
+                                    "nama": {
                                         "type": "string"
+                                    },
+                                    "whatsapp_number": {
+                                        "type": "string"
+                                    },
+                                    "subscription_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "selfbot",
+                                            "official bot"
+                                        ]
+                                    },
+                                    "payment_status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pending",
+                                            "approved",
+                                            "rejected"
+                                        ]
+                                    },
+                                    "payment_transaction_id": {
+                                        "type": "integer"
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float"
                                     }
                                 },
                                 "type": "object"

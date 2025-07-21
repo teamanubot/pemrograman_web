@@ -20,7 +20,7 @@ services:
     volumes:
       - ./db/data:/var/lib/mysql
       - ./db/conf.d:/etc/mysql/conf.d:ro
-    environment:
+    environment:  
       MYSQL_USER: rivai
       MYSQL_PASSWORD: p455w0rd1!.
       MYSQL_ROOT_PASSWORD: p455w0rd

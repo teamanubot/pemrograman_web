@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('akun_id')->constrained('akuns')->onDelete('cascade');
@@ -18,10 +19,16 @@ return new class extends Migration
             $table->string('whatsapp_number')->nullable();
             $table->enum('subscription_type', ['selfbot', 'official bot']);
             $table->enum('payment_status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->string('payment_proof')->nullable();
+
+            $table->foreignId('payment_transaction_id')
+                ->nullable()
+                ->constrained('payment_transactions')
+                ->onDelete('set null');
+
             $table->decimal('price', 10, 2);
             $table->timestamps();
         });
+
     }
 
     /**

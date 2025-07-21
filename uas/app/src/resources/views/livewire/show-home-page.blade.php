@@ -7,38 +7,31 @@
                     <div class="block text-center text-lg-start pe-0 pe-xl-5">
                         <h1 class="text-capitalize mb-4">TeamAnuBot</h1>
                         <p class="mb-4 justify-content-center">
-                            TeamAnuBot adalah sebuah sistem layanan pelanggan berbasis bot LINE yang fokus pada
+                            TeamAnuBot adalah sebuah sistem layanan pelanggan berbasis bot LINE yang berfokus pada
                             penyewaan dan pengelolaan selfbot maupun official bot LINE. Sistem ini dirancang untuk
                             mempermudah komunikasi otomatis antara pemilik bisnis dan pelanggannya melalui platform LINE
-                            yang populer di Indonesia.
-                            <br><br>
-                            Dengan pendekatan layanan pesan instan yang cepat, efisien, dan familiar bagi pengguna,
-                            TeamAnuBot hadir sebagai solusi praktis dalam pengelolaan interaksi pelanggan, pengiriman
-                            notifikasi, dan layanan terjadwal melalui bot LINE.
-                            <br><br>
-                            Di tengah meningkatnya permintaan akan bot LINE yang dapat diandalkan untuk berbagai
-                            kebutuhan bisnis dan komunitas, kebutuhan akan sistem pengelolaan yang mudah digunakan namun
-                            tetap fleksibel menjadi sangat penting.
-                            <br><br>
-                            Fitur utama TeamAnuBot adalah otomatisasi interaksi pelanggan melalui bot LINE, baik selfbot
-                            maupun official bot, namun dengan pengawasan penuh oleh admin dalam setiap proses penting
-                            seperti verifikasi pembayaran, pemberian akses, dan pengaturan masa aktif layanan. Hal ini
-                            menjaga keakuratan informasi dan menghindari penyalahgunaan layanan.
-                            <br><br>
-                            Platform ini tidak bergantung pada integrasi API pembayaran eksternal yang kompleks.
-                            Sebaliknya, data pembayaran pelanggan dapat diunggah dan diverifikasi secara manual oleh
-                            admin dengan sistem pencatatan yang terstruktur, memungkinkan fleksibilitas dalam metode
-                            pembayaran melalui QRIS.
-                            <br><br>
-                            TeamAnuBot dibangun dengan teknologi web modern seperti Laravel 12, Filament v3, dan Docker,
-                            serta memanfaatkan LINE Messaging API sebagai antarmuka utama kepada pelanggan. Antarmuka
-                            sistem dirancang menggunakan Blade, Bootstrap dan Livewire untuk memberikan pengalaman
-                            pengguna yang konsisten di berbagai perangkat.
-                            <br><br>
-                            TeamAnuBot percaya bahwa otomatisasi layanan pelanggan tidak harus mengorbankan
-                            fleksibilitas atau transparansi. Dengan sistem yang efisien, mudah digunakan, dan fokus pada
-                            kebutuhan pengelola serta pelanggan, TeamAnuBot siap menjadi mitra terpercaya bagi individu
-                            maupun komunitas yang mengandalkan LINE sebagai saluran utama komunikasi layanan mereka.
+                            yang populer di Indonesia. <br><br> Kini, TeamAnuBot telah berevolusi menjadi solusi yang
+                            lebih modern dan terintegrasi. Proses registrasi akun menggunakan verifikasi OTP melalui API
+                            bot WhatsApp, sementara invoice pemesanan juga dikirim secara otomatis melalui channel
+                            WhatsApp pelanggan. <br><br> Dalam hal pembayaran, TeamAnuBot kini mengandalkan integrasi
+                            payment gateway Midtrans, memungkinkan pelanggan melakukan pembayaran secara langsung saat
+                            pemesanan dengan metode pembayaran yang beragam dan aman. Proses verifikasi dilakukan secara
+                            otomatis, meminimalkan intervensi manual dan mempercepat aktivasi layanan. <br><br> Untuk
+                            fleksibilitas pengelolaan data, sistem ini juga dilengkapi dengan API internal yang
+                            memungkinkan kontrol dan integrasi langsung dengan database layanan, memberikan kemudahan
+                            bagi admin untuk melakukan monitoring, pengelolaan akun, dan manajemen data secara
+                            real-time. <br><br> TeamAnuBot tetap mempertahankan fokus pada otomatisasi interaksi
+                            pelanggan melalui bot LINE, baik selfbot maupun official bot, dengan pengawasan penuh oleh
+                            admin dalam proses penting seperti pengaturan masa aktif dan manajemen akses. <br><br>
+                            Platform ini dibangun dengan teknologi web modern seperti Laravel 12, Filament v3, dan
+                            Docker, serta memanfaatkan LINE Messaging API sebagai antarmuka utama kepada pelanggan.
+                            Antarmuka sistem menggunakan Blade, Bootstrap, dan Livewire untuk memberikan pengalaman
+                            pengguna yang responsif dan konsisten di berbagai perangkat. <br><br> TeamAnuBot percaya
+                            bahwa otomatisasi layanan pelanggan dapat berjalan seiring dengan fleksibilitas, keamanan,
+                            dan transparansi. Dengan sistem yang efisien, mudah digunakan, dan dirancang untuk memenuhi
+                            kebutuhan baik pengelola maupun pelanggan, TeamAnuBot siap menjadi mitra andalan bagi
+                            individu dan komunitas yang menggunakan LINE dan WhatsApp sebagai saluran utama komunikasi
+                            layanan mereka.
                         </p>
                         <section id="order" class="mb-4">
                             <a type="button" class="btn btn-primary" href="/order">
